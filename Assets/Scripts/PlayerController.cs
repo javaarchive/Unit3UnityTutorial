@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void die(){
+        Debug.Log("It looks like you died. ");
         isDead = true;
     }
 
