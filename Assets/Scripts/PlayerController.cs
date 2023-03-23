@@ -10,6 +10,16 @@ public class PlayerController : MonoBehaviour
     private float gravityMod = 15f;
     private bool isGrounded = true;
 
+    private bool isDead = false;
+
+    public bool areWeDead(){
+        return isDead;
+    }
+
+    public void die(){
+        isDead = true;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +37,13 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision){
-        isGrounded = true;
+        Debug.Log("I touched " + collision.gameObject.name);
+        if(collision.gameObject.CompareTag("Ground")){
+            Debug.Log("Enter ground");
+            isGrounded = true;
+        }else if(collision.gameObject.CompareTag("Obstacle")){
+            // die internally
+            die();
+        }
     }
 }
