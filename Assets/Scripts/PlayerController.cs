@@ -4,13 +4,33 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     private Rigidbody playerRb;
+
+    private Animator anim;
     private float jumpForce = 100f;
     private float gravityMod = 15f;
     private bool isGrounded = true;
 
     private bool isDead = false;
+
+    private const string animDeathID = "Death1";
+    private const string animJumpID = "NormalJump";
+    private const string animRunID = "NormalRun";
+
+    private AudioSource audioSrc;
+
+    public AudioClip jumpSound;
+    public AudioClip explosionSound;
+
+    public ParticleSystem splatter;
+    public ParticleSystem explosion;
+
+    private void Awake(){
+        playerRb = GetComponent<Rigidbody>();
+        audioSrc = GetComponent<AudioSource>();
+        anim = GetComponent<Animator>();
+        anim.SetBool(animRunID, true);
+    }
 
     public bool areWeDead(){
         return isDead;
@@ -18,6 +38,9 @@ public class PlayerController : MonoBehaviour
 
     public void die(){
         Debug.Log("It looks like you died. ");
+        anim.SetTrigger(animDeathID);
+        explosion.Play();
+        audioSrc.PlayOneShot(explosionSound);
         isDead = true;
     }
 
@@ -30,7 +53,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded ){
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded && !isDead){
+            
+            anim.SetTrigger(animJumpID);
+            
+            splatter.Play();
+
+            audioSrc.PlayOneShot(jumpSound);
+            
             float mass = gameObject.GetComponent<Rigidbody>().mass;
             gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * mass * jumpForce,ForceMode.Impulse);
             isGrounded = false;
