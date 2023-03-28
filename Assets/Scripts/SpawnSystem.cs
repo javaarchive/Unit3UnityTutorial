@@ -23,7 +23,9 @@ public class SpawnSystem : MonoBehaviour
 
     private void SpawnObstacle(){
         GameObject obstaclePrefab = obstacles[Random.Range(0, obstacles.Length)];
+        bool hardMode = Time.frameCount > 60*10;
         float randomizedTime = Random.Range(3.5f, 6.5f);
+        if(hardMode) randomizedTime = Random.Range(0.3f, 0.7f);
         Instantiate(obstaclePrefab, spawnPosition, obstaclePrefab.transform.rotation);
         Invoke("SpawnObstacle", randomizedTime);
     }

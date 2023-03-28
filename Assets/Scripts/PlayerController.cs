@@ -57,8 +57,7 @@ public class PlayerController : MonoBehaviour
             
             anim.SetTrigger(animJumpID);
             
-            splatter.Play();
-
+            splatter.Stop();
             audioSrc.PlayOneShot(jumpSound);
             
             float mass = gameObject.GetComponent<Rigidbody>().mass;
@@ -71,6 +70,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("I touched " + collision.gameObject.name);
         if(collision.gameObject.CompareTag("Ground")){
             Debug.Log("Enter ground");
+            splatter.Play();
             isGrounded = true;
         }else if(collision.gameObject.CompareTag("Obstacle")){
             // die internally
